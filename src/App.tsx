@@ -164,11 +164,20 @@ function ProductCard({
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-md card-hover border border-latte/20 group">
       {/* Image */}
-      <div className="relative overflow-hidden aspect-square cursor-pointer" onClick={() => onViewDetails(product)}>
+      <div className="relative overflow-hidden aspect-square cursor-pointer bg-cream-dark" onClick={() => onViewDetails(product)}>
         <img
           src={product.image}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.style.display = 'none';
+            target.parentElement!.classList.add('flex', 'items-center', 'justify-center');
+            const fallback = document.createElement('div');
+            fallback.className = 'text-center';
+            fallback.innerHTML = '<span style="font-size:3rem">☕</span><p style="color:#8B7355;font-size:0.75rem;margin-top:0.5rem">Ember & Bean</p>';
+            target.parentElement!.appendChild(fallback);
+          }}
         />
         <div className="absolute top-3 left-3">
           <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${roastColor}`}>
@@ -254,11 +263,15 @@ function ProductDetail({
 
         <div className="grid md:grid-cols-2 gap-0">
           {/* Image */}
-          <div className="aspect-square md:aspect-auto md:h-full">
+          <div className="aspect-square md:aspect-auto md:h-full bg-cream-dark flex items-center justify-center">
             <img
               src={product.image}
               alt={product.name}
               className="w-full h-full object-cover md:rounded-l-3xl"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
             />
           </div>
 
@@ -404,7 +417,11 @@ function CartSidebar({
                 <img
                   src={item.product.image}
                   alt={item.product.name}
-                  className="w-16 h-16 rounded-lg object-cover shrink-0"
+                  className="w-16 h-16 rounded-lg object-cover shrink-0 bg-cream-dark"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                  }}
                 />
                 <div className="flex-1 min-w-0">
                   <h4 className="font-semibold text-espresso text-sm truncate">{item.product.name}</h4>
@@ -653,7 +670,12 @@ function CheckoutModal({
               <div className="space-y-3 max-h-48 overflow-y-auto">
                 {items.map((item) => (
                   <div key={item.product.id} className="flex items-center gap-3 bg-white rounded-lg p-3 border border-latte/20">
-                    <img src={item.product.image} alt={item.product.name} className="w-12 h-12 rounded-lg object-cover" />
+                    <img src={item.product.image} alt={item.product.name} className="w-12 h-12 rounded-lg object-cover bg-cream-dark"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                      }}
+                    />
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-espresso text-sm truncate">{item.product.name}</p>
                       <p className="text-xs text-fog">Qty: {item.quantity}</p>
